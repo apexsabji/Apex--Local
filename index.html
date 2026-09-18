@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APEX Local | APEX Sabzi</title>
+<meta name="description" content="APEX Local - अपने आसपास की जरूरतें एक जगह। APEX Sabzi home delivery.">
+<style>
+:root{--green:#087f3f;--dark:#07552d;--light:#f2fbf5;--orange:#ff9f1c;--text:#17321f}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f7faf8;color:var(--text)}
+header{background:linear-gradient(135deg,var(--dark),var(--green));color:#fff;padding:18px 5%;position:sticky;top:0;z-index:5}
+nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.logo{font-size:27px;font-weight:800}.logo span{color:#b9f6c9}
+nav a{color:#fff;text-decoration:none;margin:0 7px;font-weight:700;font-size:14px}
+.hero{padding:50px 5%;background:linear-gradient(180deg,#eafff0,#fff);text-align:center}
+.hero h1{font-size:42px;margin:5px 0;color:var(--dark)}.hero p{font-size:18px}
+.search{max-width:650px;margin:25px auto;display:flex;gap:8px}.search input{flex:1;padding:15px;border:1px solid #cfe5d6;border-radius:12px;font-size:16px}.btn{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}.btn.orange{background:var(--orange);color:#222}
+.container{max-width:1100px;margin:auto;padding:35px 5%}h2{color:var(--dark)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}.cat,.card{background:#fff;border:1px solid #e0eee4;border-radius:15px;padding:18px;box-shadow:0 4px 15px #00000008}.cat{text-align:center;cursor:pointer}.cat b{display:block;margin-top:8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}.card h3{margin:5px 0 8px}.muted{color:#64756a;font-size:14px}.price{font-size:20px;font-weight:800;color:var(--green)}.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+section{scroll-margin-top:90px}.hidden{display:none}
+form{display:grid;gap:12px;max-width:650px}.field{display:grid;gap:5px}.field input,.field textarea,.field select{padding:12px;border:1px solid #cfe5d6;border-radius:9px;font-size:15px}.field textarea{min-height:90px}
+.notice{background:#fff8df;border-left:5px solid var(--orange);padding:14px;border-radius:8px}
+footer{background:#083b22;color:#fff;padding:30px 5%;margin-top:30px}
+.small{font-size:12px}.badge{display:inline-block;background:#e2f7e8;color:var(--green);padding:5px 9px;border-radius:99px;font-size:12px;font-weight:700}
+@media(max-width:650px){.hero h1{font-size:32px}.search{flex-direction:column}nav a{margin:3px}}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<div class="logo">APEX <span>LOCAL</span></div>
+<div>
+<a href="#home">Home</a><a href="#sabzi">Sabzi</a><a href="#businesses">Businesses</a><a href="#add">Add Business</a>
+</div>
+</nav>
+</header>
+
+<main>
+<section id="home" class="hero">
+<div class="badge">Matigaon • Chandauli</div>
+<h1>अपने आसपास की हर जरूरत, एक जगह</h1>
+<p>Local businesses खोजें और APEX Sabzi से ताजी सब्जियां घर तक मंगाएं।</p>
+<div class="search">
+<input id="searchInput" placeholder="जैसे: Mobile, Coaching, Sabzi..." oninput="searchBusinesses()">
+<button class="btn" onclick="searchBusinesses()">Search</button>
+</div>
+</section>
+
+<section class="container">
+<h2>Categories</h2>
+<div class="grid">
+<div class="cat" onclick="filterCat('सब्जी')">🥬<b>सब्जी</b></div>
+<div class="cat" onclick="filterCat('Coaching')">🏫<b>Coaching</b></div>
+<div class="cat" onclick="filterCat('Mobile')">📱<b>Mobile</b></div>
+<div class="cat" onclick="filterCat('Grocery')">🛒<b>Grocery</b></div>
+<div class="cat" onclick="filterCat('Restaurant')">🍴<b>Restaurant</b></div>
+<div class="cat" onclick="filterCat('Repair')">🔧<b>Repair</b></div>
+</div>
+</section>
+
+<section id="sabzi" class="container">
+<h2>🥬 APEX Sabzi</h2>
+<p class="muted">शुरुआती demo price. असली कीमत आप बाद में रोज update कर सकते हैं।</p>
+<div class="cards" id="products"></div>
+<div class="notice" style="margin-top:18px">
+<b>Order कैसे करें?</b> सब्जियां चुनें → WhatsApp Order दबाएं → अपना नाम और address भेजें। शुरुआत में payment और delivery manually manage करें।
+</div>
+</section>
+
+<section id="businesses" class="container">
+<h2>📍 Local Businesses</h2>
+<div class="cards" id="businessList"></div>
+</section>
+
+<section id="add" class="container">
+<h2>🏪 अपना Business जोड़ें</h2>
+<p>यह demo form अभी आपके फोन में confirmation दिखाता है। बाद में इसे database/Google Sheet से जोड़ सकते हैं।</p>
+<form onsubmit="addBusiness(event)">
+<div class="field"><label>Business Name *</label><input id="bname" required></div>
+<div class="field"><label>Category *</label><select id="bcat" required><option value="">Select</option><option>Grocery</option><option>Coaching</option><option>Mobile</option><option>Restaurant</option><option>Repair</option><option>Other</option></select></div>
+<div class="field"><label>Mobile Number *</label><input id="bphone" required inputmode="tel"></div>
+<div class="field"><label>Address *</label><textarea id="baddress" required></textarea></div>
+<button class="btn" type="submit">Submit Business</button>
+</form>
+</section>
+</main>
+
+<footer>
+<div class="logo">APEX LOCAL</div>
+<p>अपने आसपास की हर जरूरत, एक जगह।</p>
+<p class="small">Demo website — business verification, payments, live maps और database production version में जोड़ने होंगे।</p>
+</footer>
+
+<script>
+const WHATSAPP = "917973937890"; // अपना WhatsApp नंबर यहां बदलें
+
+const products = [
+ ["🥔","आलू","₹30 / kg"],["🧅","प्याज","₹35 / kg"],["🍅","टमाटर","₹42 / kg"],
+ ["🥕","गाजर","₹45 / kg"],["🥒","खीरा","₹35 / kg"],["🫛","मटर","₹60 / kg"]
+];
+const businesses = [
+ {name:"APEX Coaching Centre",cat:"Coaching",area:"Matigaon, Chandauli",phone:"",desc:"Classes 1–10 और अन्य शैक्षणिक सेवाएं।"},
+ {name:"Demo Mobile Repair",cat:"Mobile",area:"Matigaon, Chandauli",phone:"",desc:"Mobile repair और accessories।"},
+ {name:"Demo Grocery Store",cat:"Grocery",area:"Matigaon, Chandauli",phone:"",desc:"Daily grocery items।"},
+ {name:"Demo Restaurant",cat:"Restaurant",area:"Matigaon, Chandauli",phone:"",desc:"Local food & takeaway।"}
+];
+
+function renderProducts(){
+ document.getElementById("products").innerHTML = products.map(p=>`
+ <div class="card"><div style="font-size:38px">${p[0]}</div><h3>${p[1]}</h3><div class="price">${p[2]}</div>
+ <div class="actions"><button class="btn orange" onclick="orderProduct('${p[1]}','${p[2]}')">WhatsApp Order</button></div></div>`).join("");
+}
+function orderProduct(name,price){
+ const msg=`नमस्ते APEX Sabzi, मुझे ${name} (${price}) चाहिए।%0Aनाम:%0Aपता:%0Aमात्रा:%0A`;
+ window.open(`https://wa.me/${WHATSAPP}?text=${msg}`,"_blank");
+}
+function renderBusinesses(list=businesses){
+ document.getElementById("businessList").innerHTML=list.length?list.map(b=>`
+ <div class="card"><span class="badge">${b.cat}</span><h3>${b.name}</h3><div class="muted">📍 ${b.area}</div><p>${b.desc}</p>
+ <div class="actions">${b.phone?`<a class="btn" href="tel:${b.phone}">Call</a>`:""}<button class="btn" onclick="shareBusiness('${b.name}')">Share</button></div></div>`).join(""):"<p>कोई result नहीं मिला।</p>";
+}
+function searchBusinesses(){
+ const q=document.getElementById("searchInput").value.toLowerCase().trim();
+ const list=businesses.filter(b=>(b.name+" "+b.cat+" "+b.area+" "+b.desc).toLowerCase().includes(q));
+ renderBusinesses(list);
+ document.getElementById("businesses").scrollIntoView({behavior:"smooth"});
+}
+function filterCat(cat){
+ document.getElementById("searchInput").value=cat;
+ searchBusinesses();
+}
+function shareBusiness(name){
+ if(navigator.share){navigator.share({title:name,text:`APEX Local पर ${name}` ,url:location.href});}
+ else alert("इस page का link copy करके WhatsApp पर share करें।");
+}
+function addBusiness(e){
+ e.preventDefault();
+ alert("धन्यवाद! आपका business request प्राप्त हुआ। Demo version में data server पर save नहीं हो रहा है। Production version में इसे database से जोड़ा जाएगा।");
+ e.target.reset();
+}
+renderProducts();renderBusinesses();
+</script>
+</body>
+</html>
